@@ -1,1 +1,35 @@
-/** This class will remove all occurrences of a given character(ch) from a string(str).
+/** This class will remove all occurrences of a character(ch) from a 
+ * string(str).
+ * ex. "hello", 'l' -> "heo"
+ * @author jpurv
+ *
+ */
+
+import acm.program.*;
+
+public class DeleteCharsFromString extends ConsoleProgram {
+	public void run() {
+		println(removeAllOccurrences("This is a test", 't'));
+		println(removeAllOccurrences("Summer is here!", 'e'));
+		println(removeAllOccurrences("---0---", '-'));
+	}
+	
+	/** Removes all occurrences of the specified char from the string. */
+	private String removeAllOccurrences(String str,  char ch) {
+		//Stores the new string
+		String newStr = "";
+		//Stores each char from the given str one at a time
+		char ch2;
+		
+		//Check each letter in the string
+		for(int i = 0; i < str.length(); i++) {
+			//Put the char at the i position in ch2
+			ch2 = str.charAt(i);
+			//If the char from above is not equal to the specified ch, add letter to new string
+			if(ch2 != ch)
+				newStr += ch2;
+		}
+		
+		return newStr;
+	}
+}
