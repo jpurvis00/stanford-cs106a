@@ -2,7 +2,6 @@
  * string(str).
  * ex. "hello", 'l' -> "heo"
  * @author jpurv
- *
  */
 
 import acm.program.*;
