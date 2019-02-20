@@ -1,0 +1,113 @@
+/*
+ * File: Hangman.java
+ * ------------------
+ * This program will eventually play the Hangman game from
+ * Assignment #4.
+ */
+
+import acm.graphics.*;
+import acm.program.*;
+import acm.util.*;
+
+import java.awt.*;
+
+public class Hangman extends ConsoleProgram {
+
+	public void run() {
+		playGame();
+	}
+
+    /* Starts the game of hangman. */
+    private void playGame() {
+    	//Number of guess in one game
+    	int turns = 8;
+    	
+    	//Create random # to get a random word from the HangmanLexicon class list
+    	int randInt = rgen.nextInt(0, 9);
+    	
+    	//Get random word from HangmanLexicon class
+    	keyWord = word.getWord(randInt);
+    	
+    	//We will use the length of the word to create a string of matching length using only dashes
+    	int keyWordLength = keyWord.length();
+    	
+    	boolean reprompt = false;
+    	
+    	println("Welcome to Hangman!");
+    	println(keyWord);
+    	println("The word now looks like this: " + setUpDisplayWord(keyWordLength));
+    	
+    	while(turns != 0) {
+    		println("You have " + turns + " guesses left.");
+    		
+    		while(reprompt == false) {
+    			guess = readLine("Your guess: ");
+	    		
+	    		reprompt = checkGuessLength(guess);
+    		}
+    		
+    		println("The word now looks like this: " + checkGuessAgainstWord(guess));
+    		
+    		reprompt = false;
+    		turns--;
+    	}
+    }
+    
+    /* Takes the length of keyWord and creates a new word the same length comprised only of 
+     * dashes.  ex. hello -> -----
+     * Pre: length of keyWord is passed in and newStr is empty
+     * Post: newStr is the same length as keyWord and contains only dashes
+     */
+    private String setUpDisplayWord(int n) {
+    	String newStr = "";
+    	
+    	for(int i = 0; i < n; i++) {
+    		newStr += '-';
+    	}
+    	
+    	return newStr;
+    }
+    
+    /* Checks to make sure that the guess is a single letter and also checks to 
+     * make sure it's not a number.
+     */
+    private boolean checkGuessLength(String guess) {
+    	if(guess.length() > 1) {
+    		println("Your guess may only be 1 char in length!");
+    		return false;
+    	}
+    		    	
+    	if(!Character.isLetter(guess.charAt(0))) {
+    		println("Your guess must not contain any numbers!");
+    		return false;
+    	}
+    	
+    	return true;
+    }
+    
+    /* Checks the char that was guessed against keyWord.  
+     * Pre: users guess is passed in
+     * Post: msg is printed stating that the guess char is or is not contained in the keyWord.
+     */
+    private String checkGuessAgainstWord(String guess) {
+    	    	
+    	for(int i = 0; i < keyWord.length(); i++) {
+    		if(keyWord.charAt(i) == guess.charAt(0)) {
+    			guessedWord += guess.charAt(0);    			
+    		} else {
+    			guessedWord += '-';
+    		}
+    	}
+    	
+    	return guessedWord;
+    }
+
+    /** Private instance variable */
+    private static String keyWord = "";
+    private static String guess = "";
+    private static String guessedWord = "";
+    
+    /** Private obj variables */
+    private RandomGenerator rgen = RandomGenerator.getInstance();
+    HangmanLexicon word = new HangmanLexicon();
+}
