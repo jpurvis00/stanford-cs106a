@@ -13,43 +13,60 @@ import java.awt.*;
 
 public class Hangman extends ConsoleProgram {
 
+	public void init() {
+		canvas = new HangmanCanvas();
+		add(canvas);
+	}
+	
 	public void run() {
 		playGame();
 	}
 
     /* Starts the game of hangman. */
     private void playGame() {
-    	//Number of guess in one game
-    	int turns = 8;
-    	
     	//Create random # to get a random word from the HangmanLexicon class list
     	int randInt = rgen.nextInt(0, 9);
     	
     	//Get random word from HangmanLexicon class
     	keyWord = word.getWord(randInt);
-    	
+        	
     	//We will use the length of the word to create a string of matching length using only dashes
-    	int keyWordLength = keyWord.length();
+    	keyWordLength = keyWord.length();
     	
+    	canvas.reset();
+    	    	
     	boolean reprompt = false;
     	
     	println("Welcome to Hangman!");
-    	println(keyWord);
     	println("The word now looks like this: " + setUpDisplayWord(keyWordLength));
     	
     	while(turns != 0) {
     		println("You have " + turns + " guesses left.");
     		
+    		//prompt the player for input and check to make sure it's only 1 char and is a number.
+    		//If not, prompt them until the input a valid guess.
     		while(reprompt == false) {
     			guess = readLine("Your guess: ");
 	    		
 	    		reprompt = checkGuessLength(guess);
     		}
     		
+    		//Display word after guess.  If nothing matches, the word stays the same.  If something
+    		//matches, the word is updated with the char in the correct slots.
     		println("The word now looks like this: " + checkGuessAgainstWord(guess));
     		
     		reprompt = false;
-    		turns--;
+    		
+    		//Check to see if the player has won.
+    		if(checkForWinner() == true) {
+    			println("You guessed the word: " + keyWord);
+    			break;
+    		}
+    		
+    		//Check to see if the player has lost.
+    		if(turns == 0) {
+    			println("You're completely hung.\nThe word was: " + keyWord +"\nYou lose!");
+    		}
     	}
     }
     
@@ -59,13 +76,12 @@ public class Hangman extends ConsoleProgram {
      * Post: newStr is the same length as keyWord and contains only dashes
      */
     private String setUpDisplayWord(int n) {
-    	String newStr = "";
+    	//String newStr = "";
     	
     	for(int i = 0; i < n; i++) {
-    		newStr += '-';
+    		guessedWord += '-';
     	}
-    	
-    	return newStr;
+    	return guessedWord;
     }
     
     /* Checks to make sure that the guess is a single letter and also checks to 
@@ -81,33 +97,68 @@ public class Hangman extends ConsoleProgram {
     		println("Your guess must not contain any numbers!");
     		return false;
     	}
-    	
     	return true;
     }
     
-    /* Checks the char that was guessed against keyWord.  
+    /* Checks the char that was guessed against keyWord and replaces the dash in the guessedWord with the 
+     * correct letter.  
      * Pre: users guess is passed in
      * Post: msg is printed stating that the guess char is or is not contained in the keyWord.
      */
     private String checkGuessAgainstWord(String guess) {
-    	    	
-    	for(int i = 0; i < keyWord.length(); i++) {
-    		if(keyWord.charAt(i) == guess.charAt(0)) {
-    			guessedWord += guess.charAt(0);    			
-    		} else {
-    			guessedWord += '-';
-    		}
-    	}
+    	int charIndex = 0;
+    	boolean hasBeenReplaced = false;
+    	char ch = Character.toUpperCase(guess.charAt(0));
     	
+    	for(int i = 0; i < keyWordLength; i++) {
+    			charIndex = keyWord.indexOf(ch, charIndex + i);
+    		
+    			if(charIndex == -1)
+    				break;
+    			
+    			if(charIndex == 0) {
+    				guessedWord = ch + guessedWord.substring(charIndex + 1, keyWordLength);
+    				println("That guess is correct.");
+    				canvas.displayWord(guessedWord);
+    				hasBeenReplaced = true;
+    			} else if (charIndex != -1) {
+    				guessedWord = guessedWord.substring(0, charIndex) + ch + guessedWord.substring(charIndex + 1, keyWordLength);
+    				println("That guess is correct.");
+    				canvas.displayWord(guessedWord);
+    				hasBeenReplaced = true;
+    			}
+       	}
+    	
+    	if(hasBeenReplaced == false) {
+    		wrongGuesses += ch;
+    		canvas.noteIncorrectGuess(ch);
+    		println("There are no " + ch + "'s in the word.");
+    		turns--;
+    	}
     	return guessedWord;
+    }
+    
+    /* Checks to see if the player has run out of turns or if they have matched all letters in the word.
+     * Pre: player has guessed at least one letter 
+     * Post: return true if player has guessed all letters, false if turns is > 8
+     */
+    private boolean checkForWinner() {
+    	if(guessedWord.equals(keyWord))
+    		return true;
+    	
+    	return false;
     }
 
     /** Private instance variable */
     private static String keyWord = "";
     private static String guess = "";
     private static String guessedWord = "";
+    private static String wrongGuesses = "";
+    private static int keyWordLength = 0;
+    private static int turns = 8;
     
     /** Private obj variables */
     private RandomGenerator rgen = RandomGenerator.getInstance();
     HangmanLexicon word = new HangmanLexicon();
+    private HangmanCanvas canvas;
 }
