@@ -1,0 +1,48 @@
+/*
+ * File: HangmanLexicon.java
+ * -------------------------
+ * This file contains a stub implementation of the HangmanLexicon
+ * class that you will reimplement for Part III of the assignment.
+ */
+
+import acm.util.*;
+import java.io.*;
+import java.util.*;
+
+public class HangmanLexicon {
+	
+	// This is the HangmanLexicon constructor. It will open a file of words and read each word into an ArrayList
+	public HangmanLexicon() {
+		try {
+			BufferedReader rd = new BufferedReader(new FileReader("ShorterLexicon.txt"));
+						
+			while(true) {
+				String line = rd.readLine();
+				if(line == null)
+					break;
+				words.add(line);
+			}
+			rd.close();
+		} catch (IOException ex) {
+			throw new ErrorException(ex);
+		}
+		
+	}
+
+/** Returns the number of words in the lexicon. */
+	public int getWordCount() {
+		int wordCount = words.size();
+		
+		return wordCount;
+	}
+
+/** Returns the word at the specified index. */
+	public String getWord(int index) {
+		String hiddenWord = words.get(index);
+
+		return hiddenWord;
+	}
+	
+	private ArrayList<String> words = new ArrayList<String>();
+	;
+}
