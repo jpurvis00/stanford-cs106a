@@ -1,0 +1,65 @@
+/* This class will accept names from a user.  It will store the names in 
+ * an arraylist and then only print out the unique names.  No duplicates
+ * in the printed out list even though the user may have inputted dups.
+ */
+
+import java.util.*;
+
+public class uniqueNames {
+
+	public static void main(String []args) {
+		getNames();
+		displayNames();
+	}
+	
+	/* Prompts the user for a name and keeps prompting until an empty line is entered */
+	private static void getNames() {
+		String input = "temp";
+		
+		Scanner rd = new Scanner(System.in);
+		
+		while(!input.equals("")) {
+			System.out.println("Name: ");
+			input = rd.nextLine();
+			storeUniqueNames(input);
+		}
+		rd.close();
+	}
+	
+	/* Stores the name in an arrayList if it's not already in the arrayList */
+	private static void storeUniqueNames(String str) {
+		int arrSize = nameList.size();
+		int nameExists = 0;
+		
+		//This if statement works but I did not know about the arrayList contains function
+		//Will redo this with much simpler code below
+		//array has nothing in it, add first name since its unique
+		/*if(arrSize == 0) {
+			nameList.add(str);
+		} else {
+			//array has multiple names in it, check to see if new name exists in array
+			for(int j = 0; j < arrSize; j++) {
+				if(str.equals(nameList.get(j)))
+					nameExists++;
+			}
+			//if name does not exist in array, add it
+			if(nameExists == 0)
+				nameList.add(str);
+		}*/
+		
+		if(!nameList.contains(str))
+			nameList.add(str);
+	}
+	
+	/* Displays the names in the arrayList */
+	private static void displayNames() {
+		int nameListSize = nameList.size();
+		
+		for(int i = 0; i < nameListSize; i++) {
+			System.out.print(nameList.get(i) + "\t");
+		}
+	}
+	
+	/** private instance variables */
+	private static ArrayList<String> nameList = new ArrayList<String>();
+}
