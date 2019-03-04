@@ -1,0 +1,127 @@
+/* Read scores from a file and print out a histogram of the results.  The file
+ * will only have 1 score per line.  Output should be shown in the following format.
+ * 00-09:
+ * 10-19: *
+ * 20-29: ***
+ * etc.
+ */
+
+import java.io.*;
+
+public class histograms {
+
+	public static void main(String []args) {
+		String file = "MidtermScores.txt";
+		String line = "";
+		int grade = 0;
+		BufferedReader rd = null;
+		
+		try {
+			rd = new BufferedReader(new FileReader(file));
+			
+			while(true) {
+				line = rd.readLine();
+				if(line == null) break;
+				
+				grade = convertStringToInt(line);
+				storeScores(grade);
+			}
+			displayHistogram();
+		} catch (IOException ex) {
+			System.out.println("File is bad.");
+		}
+	}
+	
+	/* convert string into integers for later comparisons.  We know that the file is a list of 
+	 * midterm grades with one per line.  We read each line as a string and want to convert it to an int.
+	 * Pre:  string is passed in.  String is one grade
+	 * Post: string has been converted to an int  
+	 */
+	private static int convertStringToInt(String str) {
+		int score = 0;
+		score = Integer.valueOf(str);
+		
+		return score;
+	}
+	
+	/* stores how many times a grade is in the range of scores.  we are not worried about the actual scores, 
+	 * just how many times that score is in set range.
+	 * Pre:  an int is passed in
+	 * Post: var have been incremented by 1 if in that range
+	 */
+	private static void storeScores(int grade) {
+		if(grade < 10) 
+			zero++;
+		else if (grade < 20)
+			one++;
+		else if (grade < 30)
+			two++;
+		else if (grade < 40)
+			three++;
+		else if (grade < 50)
+			four++;
+		else if (grade < 60)
+			five++;
+		else if (grade < 70)
+			six++;
+		else if (grade < 80)
+			seven++;
+		else if (grade < 90)
+			eight++;
+		else if (grade < 99)
+			nine++;
+		else 
+			ten++;
+	}
+	
+	/* diplays the histogram */
+	private static void displayHistogram() {
+		System.out.print("00-09: ");
+		for(int i = 0; i < zero; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n10-19: ");
+		for(int i = 0; i < one; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n20-29: ");
+		for(int i = 0; i < two; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n30-39: ");
+		for(int i = 0; i < three; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n40-49: ");
+		for(int i = 0; i < four; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n50-59: ");
+		for(int i = 0; i < five; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n60-69: ");
+		for(int i = 0; i < six; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n70-79: ");
+		for(int i = 0; i < seven; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n80-89: ");
+		for(int i = 0; i < eight; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n90-99: ");
+		for(int i = 0; i < nine; i++) {
+			System.out.print("*");
+		}
+		System.out.print("\n100: ");
+		for(int i = 0; i < ten; i++) {
+			System.out.print("*");
+		}
+	}
+	
+	/**private instance variables*/
+	private static int zero = 0, one = 0, two = 0, three = 0, four = 0, five = 0, six = 0, seven = 0, eight = 0, nine = 0, ten = 0;
+}
