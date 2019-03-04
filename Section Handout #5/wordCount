@@ -1,1 +1,48 @@
-test
+/* Read a file and report how many words, lines and chars appear in the file */
+
+import java.io.*;
+import java.util.*;
+
+public class wordCount {
+
+	public static void main(String []args) {
+		String file = "lear.txt";
+		int lines = 0, words = 0, chars = 0;
+		
+		//try catch loop in case something goes wrong w reading from our file
+		try {
+			//open file
+			BufferedReader rd = new BufferedReader(new FileReader(file));
+			
+			//read from file while there is still something to read
+			while(true) {
+				//read one line at a time
+				String line = rd.readLine();
+				
+				//if we have read the last line, the next line will be null, quit loop
+				if(line == null) break;
+				
+				//break lines up by spaces
+				StringTokenizer st = new StringTokenizer(line);
+				
+				//count the # of words
+				words += st.countTokens();
+				
+				//count the # of chars
+				chars += line.length();
+				
+				//count the # of lines
+				lines++;
+			}
+			
+			//close file
+			rd.close();
+		} catch (IOException ex) {
+			//if there is a problem with the file, let the user know
+			System.out.println("Bad file!");			
+		}
+		
+		System.out.println("File: " + file + "\nLines = " + lines + "\nWords = " + words + "\nChars = " + chars);
+	}
+
+}
