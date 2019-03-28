@@ -1,0 +1,89 @@
+import acm.program.*;
+import acm.graphics.*;
+
+public class imageProcessing extends GraphicsProgram {
+	public void run() {
+		GImage image = new GImage("Milkmaid.gif");
+		//GImage grayImage = createGrayscaleImage(image);
+		//GImage flipVertImage = flipVertical(image);
+		GImage flipHorizImage = flipHorizontal(image);
+		
+		//Convert image to grayscale
+		//image.scale(0.75);
+		//add(image, 10, 50);
+		
+		//flipImage.scale(0.75);
+		//add(grayImage, 380, 50);
+		
+		
+		//Flip image Vertically
+		//image.scale(0.75);
+		//add(image, 10, 50);
+		
+		//flipVertImage.scale(0.75);
+		//add(flipVertImage, 380, 50);
+		
+		//Flip image horizontally
+		image.scale(0.75);
+		add(image, 10, 50);
+		
+		flipHorizImage.scale(0.75);
+		add(flipHorizImage, 380, 50);
+	}
+	
+	/* Takes the original image and flips it horizontally */
+	private GImage flipHorizontal(GImage image) {
+	   int[][] array = image.getPixelArray();
+
+	   for (int i = 0; i < array.length; i++) {
+	        for (int j = 0; j < array[i].length/2; j++) {
+		        int temp = array[i][j];
+		        array[i][j] = array[i][array[i].length - 1 - j];
+		        array[i][array[i].length - 1 - j] = temp;
+	        }
+	    }
+	   return new GImage(array);
+	}
+	
+	/* Takes the original image and flips it vertically */
+	private GImage flipVertical(GImage image) {
+	   int[][] array = image.getPixelArray();
+	   int height = array.length;
+	   for (int p1 = 0; p1 < height / 2; p1++) {
+	      int p2 = height - p1 - 1;
+	      int[] temp = array[p1];
+	      array[p1] = array[p2];
+	      array[p2] = temp;
+	   }
+	   return new GImage(array);
+	}
+	
+	/* Creates a grayscale version of the original image */
+	private GImage createGrayscaleImage(GImage image) {
+		//Gets copy of all pixels in the array from image
+		int[][] array = image.getPixelArray();
+		
+		int height = array.length;  //number of rows in grid
+		int width = array[0].length;  //number of columns in row
+		
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				int pixel = array[i][j];
+				
+				int r = GImage.getRed(pixel);
+				int g = GImage.getGreen(pixel);
+				int b = GImage.getBlue(pixel);
+				
+				int xx = computeLuminosity(r, g, b);
+				
+				array[i][j] = GImage.createRGBPixel(xx, xx, xx);
+			}
+		}
+		return new GImage(array);
+	}
+	
+	/* Calculates the luminosity of a pixel using NTSC formula */
+	private int computeLuminosity(int r, int g, int b) {
+		return GMath.round(0.299 * r + 0.587 * g + 0.114 * b);
+	}
+}
