@@ -155,6 +155,10 @@ public class FlightPlanner extends ConsoleProgram {
 		println("Let's plan a round-trip route!");
 	}
 	
+	/*
+	 * Reads flight patterns from a file and creates an arrayList of the cities and a HashMap of
+	 * the flights.
+	 */
 	private void readFile() {
 		//Create data structures.  Originally had this in the createDataSTructure method but
 		//it would overwrite it every time method was called.  Putting it here so they are only created once.
@@ -180,6 +184,11 @@ public class FlightPlanner extends ConsoleProgram {
 		}
 	}
 	
+	/* 
+	 * Takes one line at a time from the flights.txt file and separates the text into two
+	 * vars: startCity and destCity.  Also creates a HashMap with the key being the startCity 
+	 * and the destCity added into an arrayList.
+	 */
 	private void createDataStructure(String line) {
 		//Do the following if the line is not blank
 		if(line.length() != 0) {
@@ -195,6 +204,9 @@ public class FlightPlanner extends ConsoleProgram {
 		}
 	}
 	
+	/*
+	 * Creates an arrayList of the cities.
+	 */
 	private void addCitiesArrLst(String city) {
 		//If the cities ArrayList is empty, add first city
 		if(cities.size() == 0) {
@@ -214,6 +226,9 @@ public class FlightPlanner extends ConsoleProgram {
 		}
 	}
 	
+	/*
+	 * Prints all items from the cities arrayList.
+	 */
 	private void printCities(){
 		//If there are items in the cities ArrayList, print them all out.
 		if(cities.size() != 0) {
@@ -223,15 +238,12 @@ public class FlightPlanner extends ConsoleProgram {
 		}
 	}
 	
+	/*
+	 * Returns the arrayList associated with the HashMap key value.
+	 * ex. key value: San Jose   ->  arrayList: San Francisco, Anchorage
+	 */
 	private ArrayList<String> getDestCitiesHashMap(String startCity) {
 		return flights.get(startCity);
-	}
-	
-	private void getFlightRoutes() {
-		Iterator<String> flightsIt = flights.keySet().iterator();
-		while(flightsIt.hasNext()) {
-			println(flights.get(flightsIt.next()).toString());
-		}
 	}
 	
 	/** Private instance vars */
